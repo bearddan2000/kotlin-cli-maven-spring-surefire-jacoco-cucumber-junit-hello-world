@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+  	<parent>
+  		<groupId>org.springframework.boot</groupId>
+  		<artifactId>spring-boot-starter-parent</artifactId>
+  		<version>2.1.7.RELEASE</version>
+  		<relativePath/> <!-- lookup parent from repository -->
+  	</parent>
+
+    <groupId>local</groupId>
+    <artifactId>example</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>CucumberJunit5</name>
+    <description>Spring Context testing</description>
+
+    <properties>
+       <cucumber.bom.version>7.0.0</cucumber.bom.version>
+       <junit.bom.version>5.8.1</junit.bom.version>
+      <java.version>1.8</java.version>
+      <!-- Need this kotlin version to use random() function-->
+      <kotlin.version>1.6.0</kotlin.version>
+      <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+      <maven.compiler.target>1.8</maven.compiler.target>
+      <maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.jacoco.version>0.8.7</maven.jacoco.version>
+      <maven.compiler.version>3.8.1</maven.compiler.version>
+      <maven.surefire.version>3.0.0-M5</maven.surefire.version>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <spring.version>5.0.1.RELEASE</spring.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${cucumber.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+          <dependency>
+              <groupId>io.cucumber</groupId>
+              <artifactId>cucumber-java</artifactId>
+              <scope>test</scope>
+          </dependency>
+
+          <dependency>
+              <groupId>io.cucumber</groupId>
+              <artifactId>cucumber-junit-platform-engine</artifactId>
+              <scope>test</scope>
+          </dependency>
+
+          <dependency>
+              <groupId>org.junit.platform</groupId>
+              <artifactId>junit-platform-suite</artifactId>
+              <scope>test</scope>
+          </dependency>
+
+          <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter</artifactId>
+              <scope>test</scope>
+          </dependency>
+
+          <dependency>
+             <groupId>org.springframework</groupId>
+             <artifactId>spring-context</artifactId>
+             <version>${spring.version}</version>
+          </dependency>
+          <dependency>
+              <groupId>org.jetbrains.kotlin</groupId>
+              <artifactId>kotlin-stdlib-jdk8</artifactId>
+              <version>${kotlin.version}</version>
+          </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+          <plugin>
+              <groupId>org.jacoco</groupId>
+              <artifactId>jacoco-maven-plugin</artifactId>
+              <version>${maven.jacoco.version}</version>
+              <executions>
+                  <execution>
+                      <goals>
+                          <goal>prepare-agent</goal>
+                      </goals>
+                  </execution>
+                  <execution>
+                      <id>report</id>
+                      <phase>prepare-package</phase>
+                      <goals>
+                          <goal>report</goal>
+                      </goals>
+                  </execution>
+              </executions>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>${maven.compiler.version}</version>
+              <configuration>
+                  <encoding>${project.build.sourceEncoding}</encoding>
+                  <source>${java.version}</source>
+                  <target>${java.version}</target>
+              </configuration>
+          </plugin>
+          <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.version}</version>
+                <configuration>
+                    <properties>
+                      <configurationParameters>
+                        cucumber.plugin=pretty,html:target/site/cucumber-pretty.html
+                        cucumber.publish.quiet=true
+                        cucumber.publish.enabled=false
+                    </configurationParameters>
+                    </properties>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+    			</plugins>
+    		</build>
+
+</project>
